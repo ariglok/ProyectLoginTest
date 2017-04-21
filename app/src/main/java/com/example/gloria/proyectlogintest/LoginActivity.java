@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        sessionApiClient = new SessionApiClient(new ThreadExecutor());
+        sessionApiClient = new SessionApiClient(new ThreadExecutor(), new Clock());
 
         buttonLogin = (Button) findViewById(R.id.btnLogin);
         buttonLogout = (Button) findViewById(R.id.btnLogout);
