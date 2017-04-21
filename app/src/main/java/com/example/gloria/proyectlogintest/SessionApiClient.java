@@ -5,20 +5,40 @@ package com.example.gloria.proyectlogintest;
  */
 
 public class SessionApiClient {
-    public void login(String email, String pass, LogInCallback calback){
-        if (email.equalsIgnoreCase("GLORIA") && pass.equals("123")){
-            calback.onSuccess();
 
-        }else{
-            calback.onError();
-        }
+    private final Executor executor;
+
+    public SessionApiClient(Executor executor) {
+        this.executor = executor;
     }
-    public  void logout(LogOutCallback calback){
-        if (System.currentTimeMillis()%2 == 0){
-            calback.onSuccess();
-        }else{
-            calback.onError();
-        }
+
+    public void login(final String email, final String pass, final LogInCallback calback){
+        executor.post(
+         new Runnable() {
+            @Override
+            public void run() {
+                if (email.equalsIgnoreCase("GLORIA") && pass.equals("123")){
+                    calback.onSuccess();
+
+                }else{
+                    calback.onError();
+                }
+            }
+        });
+
+    }
+    public  void logout(final LogOutCallback calback){
+        executor.post(new Runnable() {
+            @Override
+            public void run() {
+                if (System.currentTimeMillis()%2 == 0){
+                    calback.onSuccess();
+                }else{
+                    calback.onError();
+                }
+            }
+        });
+
     }
     interface LogInCallback{
         void onSuccess();

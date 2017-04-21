@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        sessionApiClient = new SessionApiClient();
+        sessionApiClient = new SessionApiClient(new ThreadExecutor());
 
         buttonLogin = (Button) findViewById(R.id.btnLogin);
         buttonLogout = (Button) findViewById(R.id.btnLogout);
@@ -54,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess() {
                 Toast.makeText(getApplicationContext(),"Login Correcto",Toast.LENGTH_SHORT).show();
                 isLogged = true;
+                textViewClear();
                 refreshButton();
             }
 
@@ -69,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess() {
                 Toast.makeText(getApplicationContext(),"Logout Correcto",Toast.LENGTH_SHORT).show();
                 isLogged = false;
+                textViewClear();
                 refreshButton();
             }
 
@@ -80,11 +81,29 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void refreshButton(){
         if (isLogged){
-            buttonLogin.setVisibility(View.VISIBLE);
-            buttonLogout.setVisibility(View.INVISIBLE);
-        }else{
-            buttonLogin.setVisibility(View.INVISIBLE);
+            buttonLogin.setVisibility(View.GONE);
             buttonLogout.setVisibility(View.VISIBLE);
+        }else{
+            buttonLogin.setVisibility(View.VISIBLE);
+            buttonLogout.setVisibility(View.GONE);
+
         }
     }
+
+    public void textViewClear(){
+        textViewEmail.setText("");
+        textViewPassword.setText("");
+    }
+
+    public void showEmailPass(Boolean show){
+        if (show){
+            textViewEmail.setVisibility(View.VISIBLE);
+            textViewPassword.setVisibility(View.VISIBLE);
+        }else{
+            textViewEmail.setVisibility(View.GONE);
+            textViewPassword.setVisibility(View.GONE);
+        }
+
+    }
+
 }

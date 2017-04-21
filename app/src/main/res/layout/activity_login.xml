@@ -20,12 +20,12 @@
         android:paddingRight="20dp"
         >
 
-        <TextView
+      <!--  <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UserEmail:"
             android:textColor="@color/colorPrimary"
-            />
+            />-->
 
         <EditText
             android:id="@+id/email"
@@ -40,12 +40,12 @@
             android:textColorHint="@color/colorPrimaryDark" />
 
 
-        <TextView
+      <!--  <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Password:"
             android:textColor="@color/colorPrimary"
-            />
+            />-->
         <EditText
             android:id="@+id/password"
             android:layout_width="fill_parent"
