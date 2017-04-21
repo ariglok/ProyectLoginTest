@@ -33,7 +33,7 @@ public class SessionApiClient {
         executor.post(new Runnable() {
             @Override
             public void run() {
-              //  if (System.currentTimeMillis()%2 == 0) Tenemos que crear una clase Clock que nos devuelva el valor en milisegundos y no
+                //  if (System.currentTimeMillis()%2 == 0) Tenemos que crear una clase Clock que nos devuelva el valor en milisegundos y no
                 //usar directamente System para poder tener en los test cubierto tambien este metodo. De eotra forma no podríamos controlar el
                 // tiempo
                 if (clock.getCurrentTimeMillis()%2 == 0){

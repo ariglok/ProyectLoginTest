@@ -66,4 +66,5 @@ public class SessionTest {
         sessionApiClient.logout(callback);
         verify(callback).onSuccess();
     }
+
 }

@@ -7,11 +7,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LogInView {
 
-    private boolean isLogged = false;
-
-    SessionApiClient sessionApiClient;
+    private LoginPresenter presenter;
 
     Button buttonLogin;
     Button buttonLogout;
@@ -22,87 +20,71 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        sessionApiClient = new SessionApiClient(new ThreadExecutor(), new Clock());
-
+        presenter = new LoginPresenter(new SessionApiClient(new ThreadExecutor(), new Clock()), this);
         buttonLogin = (Button) findViewById(R.id.btnLogin);
         buttonLogout = (Button) findViewById(R.id.btnLogout);
         textViewEmail = (TextView) findViewById(R.id.email);
         textViewPassword = (TextView) findViewById(R.id.password);
-
-        refreshButton();
-
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                presenter.onLogInButtonClick(textViewEmail.getText().toString(), textViewPassword.getText().toString());
             }
         });
-
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logout();
-            }
-        });
-
-    }
-    public void login(){
-        sessionApiClient.login(textViewEmail.getText().toString(), textViewPassword.getText().toString(), new SessionApiClient.LogInCallback() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(getApplicationContext(),"Login Correcto",Toast.LENGTH_SHORT).show();
-                isLogged = true;
-                textViewClear();
-                refreshButton();
-            }
-
-            @Override
-            public void onError() {
-                Toast.makeText(getApplicationContext(),"Login Incorrecto",Toast.LENGTH_SHORT).show();
+                presenter.onLogOutButtonClick();
             }
         });
     }
-    public void logout(){
-        sessionApiClient.logout(new SessionApiClient.LogOutCallback() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(getApplicationContext(),"Logout Correcto",Toast.LENGTH_SHORT).show();
-                isLogged = false;
-                textViewClear();
-                refreshButton();
-            }
 
+
+    @Override
+    public void showMessage(final String message) {
+        runOnUiThread(new Runnable() {
             @Override
-            public void onError() {
-                Toast.makeText(getApplicationContext(),"Logout Incorrecto",Toast.LENGTH_SHORT).show();
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
-    public void refreshButton(){
-        if (isLogged){
-            buttonLogin.setVisibility(View.GONE);
-            buttonLogout.setVisibility(View.VISIBLE);
-        }else{
-            buttonLogin.setVisibility(View.VISIBLE);
-            buttonLogout.setVisibility(View.GONE);
 
-        }
+    @Override
+    public void showLogInForm() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewEmail.setVisibility(View.VISIBLE);
+                textViewPassword.setVisibility(View.VISIBLE);
+                buttonLogin.setVisibility(View.VISIBLE);
+                buttonLogout.setVisibility(View.GONE);
+            }
+        });
     }
 
-    public void textViewClear(){
-        textViewEmail.setText("");
-        textViewPassword.setText("");
+    @Override
+    public void showLogOutForm() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewEmail.setVisibility(View.GONE);
+                textViewPassword.setVisibility(View.GONE);
+                buttonLogin.setVisibility(View.GONE);
+                buttonLogout.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
-    public void showEmailPass(Boolean show){
-        if (show){
-            textViewEmail.setVisibility(View.VISIBLE);
-            textViewPassword.setVisibility(View.VISIBLE);
-        }else{
-            textViewEmail.setVisibility(View.GONE);
-            textViewPassword.setVisibility(View.GONE);
-        }
+    @Override
+    public void textViewClear() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewEmail.setText("");
+                textViewPassword.setText("");
+            }
+        });
 
     }
 
